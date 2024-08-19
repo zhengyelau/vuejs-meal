@@ -1,14 +1,21 @@
 <script setup>
-import { computed } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import store from "../store"
+import axiosClient from "../axiosClient"
 const meal = computed(() => store.state.meals)
 
 const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+const ingredients = ref([]);
+onMounted(async() => {
+    await axiosClient.get('list.php?i=list').then((res) => {
+        ingredients.value = res.data
+    })
+})
 
 </script>
 
 <template>
-    <div class="flex flex-col p-8">
+    <div class="flex flex-col p-8 h-full">
 
         <div>
             <input type="text" class="rounded border-2 border-gray-200 w-full" placeholder="Search for meals" />
